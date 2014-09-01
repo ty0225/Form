@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<title></title>
+	<script type="text/javascript">
+	var EventUtil = {
+
+	    addHandler: function(element, type, handler){
+	        if (element.addEventListener){
+	            element.addEventListener(type, handler, false);
+	        } else if (element.attachEvent){
+	            element.attachEvent("on" + type, handler);
+	        } else {
+	            element["on" + type] = handler;
+	        }
+	    },
+	    
+	    getEvent: function(event){
+	        return event ? event : window.event;
+	    },
+	    
+	    getTarget: function(event){
+	        return event.target || event.srcElement;
+	    }
+
+	};
+	window.onload=function(){
+		(function(){
+			function tabForward(e){
+				var e=EventUtil.getEvent(e);
+				var target=EventUtil.getTarget(e);
+				// debugger;
+				if(target.value.length==target.maxLength){
+
+					var form=target.form;
+					for (var i=0,len=form.elements.length; i<len; i++) {
+						if(form.elements[i]==target){
+							if(form.elements[i+1]){
+								form.elements[i+1].focus();
+							}
+							return ;
+						}
+					}
+				}
+			}
+
+			var tele1=document.getElementById("txttel1");
+			var tele2=document.getElementById("txttel2");
+
+			EventUtil.addHandler(tele1,"keyup",tabForward);
+			EventUtil.addHandler(tele2,"keyup",tabForward);
+		})();
+	};
+	</script>
+</head>
+<body>
+	<form action="#" id="focusform">
+		<input type="text" name="tele" id="txttel1" maxlength="4" size="4" />
+		<span>-</span>
+		<input type="text" name="tele" id="txttel2" maxlength="8" size="8" />
+	</form>
+</body>
+</html>

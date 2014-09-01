@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<title></title>
+	<script type="text/javascript">
+    var EventUtil = {
+        addHandler: function(element, type, handler){
+            if (element.addEventListener){
+                element.addEventListener(type, handler, false);
+            } else if (element.attachEvent){
+                element.attachEvent("on" + type, handler);
+            } else {
+                element["on" + type] = handler;
+            }
+        },
+        preventDefault: function(event){
+            if (event.preventDefault){
+                event.preventDefault();
+            } else {
+                event.returnValue = false;
+            }
+        }
+    };
+	window.onload=function(){
+
+		var selectbox=document.forms["selectbox"].elements["location"];
+        var sub=document.forms["selectbox"].elements["sub"];
+        var message="";
+
+        function getSelectedOptions(selectbox){
+
+            var result=new Array();
+            var option=null;
+
+            for(var i=0,len=selectbox.options.length;i<len;i++){
+                option=selectbox.options[i];
+                if(option.selected){
+                    result.push(option);
+                }
+            }
+            return result;
+        }
+
+        function showSelectInfo(selectedOptions){
+
+            message="";
+            selectedOptions=getSelectedOptions(selectbox);
+            
+            for(var i=0,len=selectedOptions.length;i<len;i++){
+                message+="Selected index: "+selectedOptions[i].index+
+                         "\n Selected text: "+selectedOptions[i].text+
+                         "\n Selected value: "+selectedOptions[i].value+"\n\n";
+            }
+            alert(message);
+            EventUtil.preventDefault(event);//阻止刷新
+        }
+        
+        // EventUtil.addHandler(sub,"click",showSelectInfo);
+        EventUtil.addHandler(selectbox,"change",showSelectInfo);
+
+	};
+	</script>
+</head>
+<body>
+	<form action="" id="focusform" name="selectbox" >
+		<select name="location" id="sellocation" multiple>
+            <option value="sunny">sunny</option>
+			<option value="logs">logs</option>
+			<option value="view">wiew</option>
+			<option value="">china</option>
+			<option>aust</option>
+		</select>
+		<input type="submit" value="submit" name="sub" />
+	</form>
+</body>
+</html>
